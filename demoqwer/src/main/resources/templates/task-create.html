@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Task</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+  <h2 class="my-4">Create New Task</h2>
+  <form th:action="@{/tasks/create}" method="post" th:object="${task}">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input type="text" id="title" class="form-control" th:field="*{title}" required>
+      <div th:if="${#fields.hasErrors('title')}" class="text-danger" th:errors="*{title}">Title Error</div>
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" class="form-control" th:field="*{description}"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="dueDate">Due Date</label>
+      <input type="date" id="dueDate" class="form-control" th:field="*{dueDate}"
+             th:min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" />
+
+      <div th:if="${dateError}" class="text-danger" th:text="${dateError}"></div>
+    </div>
+    <div class="form-group">
+      <label for="priority">Priority</label>
+      <select id="priority" class="form-control" th:field="*{priority}">
+        <option value="LOW">Low</option>
+        <option value="MEDIUM">Medium</option>
+        <option value="HIGH">High</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="status">Status</label>
+      <select id="status" class="form-control" th:field="*{status}">
+        <option value="ACTIVE">Active</option>
+        <option value="COMPLETED">Completed</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="category">Category</label>
+      <select id="category" class="form-control" th:field="*{category.id}">
+        <option value="" disabled selected>Select a category</option>
+        <th:block th:each="category : ${categories}">
+          <option th:value="${category.id}" th:text="${category.name}"></option>
+        </th:block>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Task</button>
+    <a href="/tasks" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
